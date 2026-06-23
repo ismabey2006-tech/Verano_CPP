@@ -1,0 +1,300 @@
+================================================================
+   EXAMEN DE MEDIO TÉRMINO — PROGRAMACIÓN AVANZADA EN C++
+   Universidad San Francisco de Quito — USFQ
+
+   "El software y las catedrales son casi lo mismo:
+    primero las construimos, luego rezamos."
+
+   Nombre: Adrian Arias
+   Fecha:  23/06/2026.
+   Nota:   _______ / 100
+
+   Instrucciones:
+   - Duración: 60 minutos
+   - Puedes usar el IDE para la Sección C únicamente
+   - Las secciones A y B son SIN computadora — papel y lápiz
+   - En preguntas de código: la sintaxis debe ser C++ válido
+   - Justifica tus respuestas conceptuales — una respuesta
+     sin explicación recibe puntaje parcial
+
+   Distribución de tiempo recomendada:
+   - Sección A (30 pts):  12–15 minutos  → no más de 15
+   - Sección B (25 pts):  15–18 minutos  → no más de 18
+   - Sección C (45 pts):  25–30 minutos  → es la sección
+     que más puntos vale, no la dejes para el final
+   - Puntos extra:        solo si terminas antes de los 60 min
+
+   CONSEJO: si llegas a los 25 minutos y aún estás en A o B,
+   pasa a C de inmediato — vale casi la mitad del examen.
+================================================================
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  SECCIÓN A — TEORÍA CONCEPTUAL            (SIN IDE) 30 pts ║
+╚══════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────
+A1. (2 pts) ¿En qué momento determina C++ el tipo de una
+variable, y qué ventaja concreta da eso al programador?
+
+  En el momento de encadenar y compilar, sin embargo el programador lo hace al momento de declarar la variable. Esto da una ventaja, ya que podemos optimizar de forma adecuada el programa
+  en función  de su propósito.
+────────────────────────────────────────────────────────────────
+A2. (6 pts) Una función en C++ puede recibir sus argumentos
+de tres formas distintas.
+Nombra cada forma con su término técnico en C++, explica
+qué ocurre con el argumento original en cada caso, y da
+un ejemplo de situación real donde usarías cada una.
+
+  Primera forma — nombre técnico: Paso por valor: Se crea una copia del valor almacenado en la variable, sin afectar la original.
+
+  Segunda forma — nombre técnico: Paso por referencia: Se pasa la dirección de memoria de la variable, por lo que cualquier cambio afecta directamente a la variable original.
+
+  Tercera forma — nombre técnico: Paso por puntero: Es similar al paso por referencia, solo que esta vez usamos una variable puntero la cual apunta a la dirección de memoria de nuestra  variable original, permitiéndonos modificar el valor de la variable a través de la desreferenciacion del puntero.
+
+────────────────────────────────────────────────────────────────
+A3. (4 pts) En C++, el símbolo * tiene más de un significado
+según el contexto en que aparece. Lo mismo ocurre con &.
+Enfócate en los usos relacionados con punteros y referencias
+— no en los operadores aritméticos.
+
+  Explica los usos de * relacionados con punteros,
+  con un ejemplo de una línea para cada uno:
+  
+El "*" nos sirve para declarar variables puntero y para desreferenciar.
+Ejemplo:
+
+int x=5;
+int* p=&x;      -----> Aquí declaramos un puntero llamado p el cual apunta a la dirección de memoria de x.
+
+
+cout<<*p<<endl;   -------> Aquí estamos desreferenciando el puntero p, lo cual nos permite acceder al valor de x almacenado en esa dirección de memoria a la cual apuntaba.
+
+
+  Explica los usos de & relacionados con punteros y referencias,
+  con un ejemplo de una línea para cada uno:
+
+  El "&" nos sirve para poder acceder a la dirección de memoria de una variable. También al momento de usar punteros nos permite declararlos con precisión.
+  Ejemplo: 
+
+  int x=5;
+  int*p =&x;        -----> Aquí declaramos un puntero llamado p el cual apunta a la dirección de memoria de x.
+
+  cout<<&x<<endl;  ------> Esto imprime la dirección de memoria donde se almacena x (es de la forma 0xalgo)
+────────────────────────────────────────────────────────────────
+A4. (6 pts) Completa la tabla con el valor de cada expresión
+después de ejecutar este bloque. Trabaja A MANO — no uses IDE.
+
+  int x = 8;
+  int* p = &x;
+  int** pp = &p;
+
+  ┌──────────────────────────┬─────────────────────────────┐
+  │ Expresión                │ Valor / resultado           │
+  ├──────────────────────────┼─────────────────────────────┤
+  │ x                        │   8                          │
+  │ *p                       │   8                         │
+  │ **pp                     │   8                          │
+  │ &x == p                  │                          │
+  │ *p = 20; → valor de x    │   20                         │
+  │ **pp después de *p = 20  │   20                         │
+  └──────────────────────────┴─────────────────────────────┘
+
+────────────────────────────────────────────────────────────────
+A5. (4 pts) Después de liberar memoria con delete, un
+programador experimentado siempre escribe una línea más.
+¿Cuál es esa línea? ¿Por qué es necesaria? ¿Qué problema
+evita concretamente?
+
+  La línea: puntero=nullptr;
+
+  Por qué:
+  Para que el puntero no se quede apuntando a una dirección de memoria que ya no existe.
+  Qué problema evita:
+  Dangling pointers.
+────────────────────────────────────────────────────────────────
+A6. (8 pts) Lee el siguiente código. NO lo ejecutes —
+razona en papel.
+
+  #include <iostream>
+  using namespace std;
+
+  class Caja {
+  private:
+      int* datos;
+      int n;
+  public:
+      Caja(int tam) : n(tam) {
+          datos = new int[n];
+          for (int i = 0; i < n; i++)
+              datos[i] = i * 10;
+      }
+
+      ~Caja() {
+          delete[] datos;
+          datos = nullptr;
+      }
+
+      int obtener(int i) const {
+          return datos[i];
+      }
+  };
+
+  int main() {
+      Caja c1(3);
+      Caja* c2 = new Caja(2);
+
+      cout << c1.obtener(0) << endl;   // línea 1
+      cout << c2->obtener(1) << endl;  // línea 2
+
+      delete c2;
+      c2 = nullptr;
+
+      return 0;
+  }
+
+  a) (3 pts) Escribe la salida EXACTA del programa.
+      0
+      10
+
+  b) (2 pts) ¿Qué ocurre en memoria cuando se ejecuta
+     delete c2? Sé específico — ¿qué se destruye y en qué
+     orden?
+     Se destruye la dirección almacenada en c2, 
+
+  c) (3 pts) Si en lugar de delete c2 escribieras
+     c2 = nullptr sin hacer delete primero, ¿qué problema
+     ocurriría? ¿Cómo se llama ese problema?
+     Memory leak: perderíamos acceso a la dirección de memoria a la cual apuntaba c2.
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  SECCIÓN B — ANÁLISIS DE CÓDIGO           (SIN IDE) 25 pts ║
+╚══════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────
+B1. (10 pts) El siguiente código COMPILA sin errores pero
+produce un resultado incorrecto o tiene un problema grave
+en ejecución. Identifica QUÉ está mal, POR QUÉ ocurre,
+y cómo corregirlo.
+
+  PISTA: no busques errores de sintaxis — el compilador
+  no encontró ninguno. Busca errores de lógica o de diseño.
+
+  #include <iostream>
+  using namespace std;
+
+  class Contador {
+  private:
+      int valor;
+  public:
+      Contador(int v) : valor(v) {}
+
+      int getValor() { return valor; }
+
+      void setValor(int nuevo) {
+          valor = nuevo;
+      }
+  };
+
+  void incrementar(Contador c) {
+      c.setValor(c.getValor() + 1);
+  }
+
+  int main() {
+      Contador cnt(0);
+      incrementar(cnt);
+      incrementar(cnt);
+      incrementar(cnt);
+      cout << cnt.getValor() << endl;
+      return 0;
+  }
+
+  ¿Qué imprime realmente? 0
+
+  El programador esperaba que imprimiera 3. ¿Por qué imprime
+  eso en cambio? Explica el mecanismo exacto.
+  
+  Este programa no esta operando directamente sobre el valor inicial, si se suma de forma local, pero al momento de imprimir no se guardo realmente ese cambio, por lo que se imprime el       valor declarado inicialmente.
+
+  ¿Cómo lo corriges? Escribe la firma corregida de la función:
+  
+   
+
+────────────────────────────────────────────────────────────────
+B2. (8 pts) El siguiente código también compila. Sin
+ejecutarlo, responde:
+
+  class Animal {
+  protected:
+      string nombre;
+  public:
+      Animal(string n) : nombre(n) {}
+      void hablar() {
+          cout << nombre << " hace un sonido." << endl;
+      }
+  };
+
+  class Perro : public Animal {
+  public:
+      Perro(string n) : Animal(n) {}
+      void hablar() {
+          cout << nombre << " dice: Guau!" << endl;
+      }
+  };
+
+  int main() {
+      Animal* a = new Perro("Rex");
+      a->hablar();
+      delete a;
+      return 0;
+  }
+
+  a) (3 pts) ¿Qué imprime a->hablar()? ¿Por qué imprime
+     ESO y no la versión de Perro?
+     Rex hace un sonido. Imprime eso porque el puntero "a" s de la clase Animal, por lo que ejecuta el método asociado a esa clase.
+
+  b) (3 pts) ¿Qué cambio de UNA PALABRA en la clase Animal
+     haría que imprimiera la versión de Perro? Explica el
+     mecanismo que activa ese cambio.
+
+     virtual. Estariamos aplicando polimorfismo.
+     
+
+  c) (2 pts) ¿Hay algún problema con el delete a? ¿Por qué?
+     
+      
+
+────────────────────────────────────────────────────────────────
+B3. (7 pts) Escribe qué imprime cada fragmento SIN usar IDE.
+Si el fragmento tiene comportamiento indefinido, escríbelo
+y explica por qué.
+
+  Fragmento 1:
+    int arr[] = {5, 10, 15, 20};
+    int* p = arr;
+    p++;
+    cout << *p << endl;
+    cout << *(p + 1) << endl;
+  Imprime: 
+  10
+  15
+
+
+  Fragmento 2:
+    int* p = new int(3);
+    delete p;
+    p = nullptr;
+    cout << *p << endl;
+  Imprime / ocurre: Comportamiento indefinido
+  Por qué: porque p apunta a nullptr, y el querer desreferenciar este puntero, puede colapsar todo.
+
+  Fragmento 3:
+    int buscar(int a, int b)   { return a + b; }
+    int buscar(int a, int b, int c) { return a + b + c; }
+    cout << buscar(2, 3) << endl;
+    cout << buscar(1, 2, 3) << endl;
+  Imprime: 
+  5
+  6
+
