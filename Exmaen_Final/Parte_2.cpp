@@ -14,7 +14,7 @@ class Publicacion{
     	
        virtual int diasPrestamo() const = 0;
        virtual void imprimir() const {
-        cout << "[" << anio << "] " << titulo << " — " << autor << endl;
+        cout << "[" << anio << "] " << titulo << " â€” " << autor << endl;
         cout << "Prestamo: " << diasPrestamo() << " dias" << endl;
     }
     
